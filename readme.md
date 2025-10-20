@@ -61,6 +61,8 @@ Os dados são mantidos mesmo após fechar o programa.
 
 ---
 
-**Disciplina**: Estrutura de Dados e Algoritmos 
-**Instituição**: Universidade Catolica de Brasília 
+**Disciplina**: Estrutura de Dados e Algoritmos
+
+**Instituição**: Universidade Católica de Brasília
+
 **Ano**: 2025
