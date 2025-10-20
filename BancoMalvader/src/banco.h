@@ -8,6 +8,7 @@ typedef struct
     char arquivo_clientes[128];
     char arquivo_mov[128];
 } Banco;
+
 void banco_init(Banco *B, const char *arq_clientes, const char *arq_mov);
 void banco_free(Banco *B);
 int banco_carregar(Banco *B);
