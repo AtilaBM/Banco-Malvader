@@ -126,64 +126,37 @@ int main(void)
         break;
 
         case 2:
-            printf("\n'Encerrar conta'.\n");
-            break;
-
-        case 3:
-            printf("\n'Consultar dados'.\n");
-            break;
-
-        case 4:
-            printf("\n'Alterar dados'.\n");
-            break;
-
-        case 5:
             printf("\n'Depositar'.\n");
             break;
 
-        case 6:
+        case 3:
             printf("\n'Sacar'.\n");
             break;
 
+        case 4:
+            printf("\n'Transferir'.\n");
+            break;
+
+        case 5:
+            printf("\n'Consultar saldo e dados'.\n");
+            break;
+
+        case 6:
+            printf("\n'Atualizar telefone e agencia'.\n");
+            break;
+
         case 7:
-            printf("\n'Listar por nome'.\n");
+            printf("\n'Listar contas'.\n");
             break;
 
         case 8:
-            printf("\n'Listar por cpf'.\n");
+            printf("\n'Encerrar conta'.\n");
             break;
 
         case 9:
-            int numero;
-
-            printf("\n'Consultar por numero da conta'.\n");
-
-            printf("Digite o numero da sua conta: ");
-            scanf("%d", &numero);
-
-            int resultado = encontrar_conta_por_numero(contas, qtd_contas, numero);
-
-            if (resultado != -1)
-            {
-                printf("\n--- Conta Encontrada ---\n");
-                printf("Número: %d\n", contas[resultado].numero);
-                printf("Nome: %s\n", contas[resultado].nome);
-                printf("CPF: %s\n", contas[resultado].cpf);
-                printf("Agência: %s\n", contas[resultado].agencia);
-                printf("Telefone: %s\n", contas[resultado].telefone);
-                printf("Saldo: R$ %.2f\n", contas[resultado].saldo);
-                printf("Status: %s\n", contas[resultado].status == ATIVA ? "ATIVA" : "ENCERRADA");
-            }
-            else
-            {
-                printf("\nConta não encontrada.\n");
-            }
-
+            printf("\n'Sair'.\n");
             break;
-        case 10:
-            printf("\n'Consultar saldo'.\n");
-            break;
-
+    
         default:
             printf("\nOpção inválida! Tente novamente.\n");
             break;
@@ -205,19 +178,19 @@ static int menu(void)
 {
     int op;
 
-    printf("\n========== Banco Malvader ==========\n");
-    printf("1 - Abrir conta\n");
-    printf("2 - Encerrar conta\n");
-    printf("3 - Consultar dados\n");
-    printf("4 - Alterar dados\n");
-    printf("5 - Depositar\n");
-    printf("6 - Sacar\n");
-    printf("7 - Listar por nome\n");
-    printf("8 - Listar por conta\n");
-    printf("9 - Consultar conta por número\n");
-    printf("0 - Sair\n");
-    printf("====================================\n");
+    printf("\nMenu\n");
+    printf("1. Abrir conta\n");
+    printf("2. Depositar\n");
+    printf("3. Sacar\n");
+    printf("4. Transferir\n");
+    printf("5. Consultar saldo e dados\n");
+    printf("6. Atualizar telefone e agencia\n");
+    printf("7. Listar contas\n");
+    printf("8. Encerrar conta\n");
+    printf("9. Sair\n");
     printf("Escolha: ");
+    scanf("%d", &op);
+
 
     if (scanf("%d", &op) != 1)
     {
