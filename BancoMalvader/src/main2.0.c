@@ -282,7 +282,7 @@ int main(void)
     return 0;
 }
 
-// --- Funções de I/O ---
+
 
 static void limpar_entrada(void)
 {

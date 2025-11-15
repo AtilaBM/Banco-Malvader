@@ -123,7 +123,7 @@ static int menu(void)
     printf("9 - Consultar saldo\n");
     printf("0 - Sair\n");
     printf("====================================\n");
-    printf("Escolha: ");
+    printf("Digite a opção desejada: ");
     
     if (scanf("%d", &op) != 1)
     {
