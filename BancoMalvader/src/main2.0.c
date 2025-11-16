@@ -281,8 +281,8 @@ int main(void)
             int c_num;
 
             printf("CONSULTA DE DADOS \n");
-            printf("1. Buscar por CPF\n");
-            printf("2. Buscar por Número da Conta\n");
+            printf("1- Buscar por CPF\n");
+            printf("2- Buscar por Número da Conta\n");
             
             if (scanf("%d", &tipbusca) != 1) {
             printf("\nOpção de busca inválida.\n");
