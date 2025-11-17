@@ -167,6 +167,34 @@ int main(void)
     int proximo_numero = 1;
     int op;
 
+
+    contas[0].numero = 1001;
+    strcpy(contas[0].nome, "Alice Silva");
+    strcpy(contas[0].cpf, "118.901.011-21");
+    strcpy(contas[0].agencia, "0001");
+    strcpy(contas[0].telefone, "98765-4321");
+    contas[0].saldo = 500.00;
+    contas[0].status = ATIVA;
+   
+    contas[1].numero = 1002;
+    strcpy(contas[1].nome, "Bruno Mendes");
+    strcpy(contas[1].cpf, "222.122.933-22");
+    strcpy(contas[1].agencia, "0002");
+    strcpy(contas[1].telefone, "99887-7665");
+    contas[1].saldo = 2000.50;
+    contas[1].status = ATIVA;
+    
+    contas[2].numero = 1003;
+    strcpy(contas[2].nome, "Carlos Neto");
+    strcpy(contas[2].cpf, "596.309.933-23");
+    strcpy(contas[2].agencia, "0003");
+    strcpy(contas[2].telefone, "97766-5544");
+    contas[2].saldo = 0.00;
+    contas[2].status = ENCERRADA;
+  
+    qtd_contas = 3;
+   
+    proximo_numero = 1004;
     do
     {
         op = menu();
@@ -177,30 +205,33 @@ int main(void)
             printf("\nEncerrando sistema...\n");
             break;
 
-        
         case 1:
         {
             Conta nova_conta_temp;
+            char prox_agencia_num[TAM_AGENCIA]; 
+    
             printf("\n--- Abertura de Conta ---\n");
             ler_cliente_base(&nova_conta_temp);
 
+    
+            sprintf(prox_agencia_num, "%04d", qtd_contas + 1);
+            strcpy(nova_conta_temp.agencia, prox_agencia_num); 
+    
             int resultado = abrir_conta(contas, &qtd_contas, proximo_numero,
-                                        nova_conta_temp.nome, nova_conta_temp.cpf,
-                                        nova_conta_temp.agencia, nova_conta_temp.telefone);
+                                nova_conta_temp.nome, nova_conta_temp.cpf,
+                                nova_conta_temp.agencia, nova_conta_temp.telefone); 
 
-            if (resultado > 0)
-            {
-                printf("\nConta criada com sucesso! Número da Conta: %d\n", resultado);
-                proximo_numero++;
+            if (resultado > 0){
+            printf("\nConta criada com sucesso! Número: %d (Agencia: %s)\n", resultado, nova_conta_temp.agencia);
+            proximo_numero++;
             }
+            else{
+            if (resultado == -2)
+            printf("\nERRO: Limite de contas atingido! Nenhuma conta aberta.\n");
+            else if (resultado == -1)
+            printf("\nERRO: CPF já cadastrado em uma conta ativa. Nenhuma conta aberta.\n");
             else
-            {
-                if (resultado == -2)
-                    printf("\nERRO: Limite de contas atingido! Nenhuma conta aberta.\n");
-                else if (resultado == -1)
-                    printf("\nERRO: CPF já cadastrado em uma conta ativa. Nenhuma conta aberta.\n");
-                else
-                    printf("\nERRO: Falha desconhecida ao abrir a conta.\n");
+            printf("\nERRO: Falha desconhecida ao abrir a conta.\n");
             }
         }
         break;
@@ -376,10 +407,6 @@ static int menu(void)
 
 static void ler_cliente_base(Conta *c)
 {
-    printf("Agência: ");
-    fgets(c->agencia, sizeof c->agencia, stdin);
-    c->agencia[strcspn(c->agencia, "\n")] = 0;
-
     printf("Nome: ");
     fgets(c->nome, sizeof c->nome, stdin);
     c->nome[strcspn(c->nome, "\n")] = 0;
