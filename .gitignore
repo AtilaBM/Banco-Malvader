@@ -1,3 +1,6 @@
+# VS Code settings and extensions
+.vscode/
+
 # Prerequisites
 *.d
 
@@ -55,8 +58,7 @@ dkms.conf
 *.dwo
 
 #Outros
-
-.vscode/
+.vscode/*
 *.pptx
 *.docx
 *.pdf
