@@ -37,11 +37,15 @@ int abrir_conta(Conta contas[], int *qtd, int proximo_numero,
 int depositar(Conta contas[], int qtd, int numero_conta, double valor);
 int sacar(Conta contas[], int qtd, int numero_conta, double valor);
 int transferir(Conta contas[], int qtd, int origem, int destino, double valor);
-int consultar_conta(const Conta contas[], int qtd, int numero);
 int atualizar_dados(Conta contas[], int qtd, int numero,
                      const char *nova_agencia, const char *novo_telefone);
+void listar_contas(const Conta contas[], int qtd);
+int encerrar_conta(Conta contas[], int qtd, int numero);
 
 
+// ------------------------------------------------------
+// FUNÇÕES JÁ EXISTENTES
+// ------------------------------------------------------
 
 int encontrar_conta_por_numero(const Conta contas[], int qtd, int numero)
 {
@@ -66,7 +70,6 @@ int encontrar_conta_por_cpf(const Conta contas[], int qtd, const char *cpf)
     }
     return -1;
 }
-
 
 int abrir_conta(Conta contas[], int *qtd, int proximo_numero,
                  const char *nome, const char *cpf,
@@ -94,7 +97,6 @@ int abrir_conta(Conta contas[], int *qtd, int proximo_numero,
     return nova->numero;
 }
 
-
 int depositar(Conta contas[], int qtd, int numero_conta, double valor)
 {
     if (valor <= 0)
@@ -109,7 +111,6 @@ int depositar(Conta contas[], int qtd, int numero_conta, double valor)
     contas[indice].saldo += valor;
     return 0; 
 }
-
 
 int sacar(Conta contas[], int qtd, int numero_conta, double valor)
 {
@@ -126,7 +127,6 @@ int sacar(Conta contas[], int qtd, int numero_conta, double valor)
     contas[indice].saldo -= valor;
     return 0; 
 }
-
 
 int transferir(Conta contas[], int qtd, int origem, int destino, double valor)
 {
@@ -145,7 +145,6 @@ int transferir(Conta contas[], int qtd, int origem, int destino, double valor)
     return 0;
 }
 
-
 void imprimir_dados_conta(const Conta *c)
 {
     printf("\n--- Dados da Conta %d ---\n", c->numero);
@@ -159,6 +158,53 @@ void imprimir_dados_conta(const Conta *c)
 }
 
 
+// ------------------------------------------------------
+// NOVAS FUNÇÕES PEDIDAS
+// ------------------------------------------------------
+
+int atualizar_dados(Conta contas[], int qtd, int numero,
+                     const char *nova_agencia, const char *novo_telefone)
+{
+    int idx = encontrar_conta_por_numero(contas, qtd, numero);
+    if (idx == -1) return -1;
+    if (contas[idx].status == ENCERRADA) return -2;
+
+    strcpy(contas[idx].agencia, nova_agencia);
+    strcpy(contas[idx].telefone, novo_telefone);
+
+    return 0;
+}
+
+void listar_contas(const Conta contas[], int qtd)
+{
+    printf("\n===== LISTA DE CONTAS =====\n");
+    for (int i = 0; i < qtd; i++)
+    {
+        printf("Conta %d | %s | CPF: %s | Status: %s | Saldo: R$%.2lf\n",
+               contas[i].numero,
+               contas[i].nome,
+               contas[i].cpf,
+               contas[i].status == ATIVA ? "ATIVA" : "ENCERRADA",
+               contas[i].saldo);
+    }
+    printf("===========================\n");
+}
+
+int encerrar_conta(Conta contas[], int qtd, int numero)
+{
+    int idx = encontrar_conta_por_numero(contas, qtd, numero);
+    if (idx == -1) return -1;
+    if (contas[idx].status == ENCERRADA) return -2;
+    if (contas[idx].saldo != 0) return -3;
+
+    contas[idx].status = ENCERRADA;
+    return 0;
+}
+
+
+// ------------------------------------------------------
+// MAIN
+// ------------------------------------------------------
 
 int main(void)
 {
@@ -195,6 +241,7 @@ int main(void)
     qtd_contas = 3;
    
     proximo_numero = 1004;
+
     do
     {
         op = menu();
@@ -213,7 +260,6 @@ int main(void)
             printf("\n--- Abertura de Conta ---\n");
             ler_cliente_base(&nova_conta_temp);
 
-    
             sprintf(prox_agencia_num, "%04d", qtd_contas + 1);
             strcpy(nova_conta_temp.agencia, prox_agencia_num); 
     
@@ -222,21 +268,20 @@ int main(void)
                                 nova_conta_temp.agencia, nova_conta_temp.telefone); 
 
             if (resultado > 0){
-            printf("\nConta criada com sucesso! Número: %d (Agencia: %s)\n", resultado, nova_conta_temp.agencia);
-            proximo_numero++;
+                printf("\nConta criada com sucesso! Número: %d (Agencia: %s)\n", resultado, nova_conta_temp.agencia);
+                proximo_numero++;
             }
             else{
-            if (resultado == -2)
-            printf("\nERRO: Limite de contas atingido! Nenhuma conta aberta.\n");
-            else if (resultado == -1)
-            printf("\nERRO: CPF já cadastrado em uma conta ativa. Nenhuma conta aberta.\n");
-            else
-            printf("\nERRO: Falha desconhecida ao abrir a conta.\n");
+                if (resultado == -2)
+                    printf("\nERRO: Limite de contas atingido! Nenhuma conta aberta.\n");
+                else if (resultado == -1)
+                    printf("\nERRO: CPF já cadastrado em uma conta ativa. Nenhuma conta aberta.\n");
+                else
+                    printf("\nERRO: Falha desconhecida ao abrir a conta.\n");
             }
         }
         break;
 
-        
         case 2:
         {
             int numero;
@@ -257,7 +302,6 @@ int main(void)
         }
         break;
 
-        
         case 3:
         {
             int numero;
@@ -279,7 +323,6 @@ int main(void)
         }
         break;
 
-        
         case 4:
         {
             int origem, destino;
@@ -303,7 +346,7 @@ int main(void)
             else if (resultado == -5) printf("\nERRO: Contas de origem e destino não podem ser a mesma.\n");
         }
         break;
-        
+
         case 5: 
         {
             int tipbusca;
@@ -316,48 +359,102 @@ int main(void)
             printf("2- Buscar por Número da Conta\n");
             
             if (scanf("%d", &tipbusca) != 1) {
-            printf("\nOpção de busca inválida.\n");
-            limpar_entrada();
-            break; 
+                printf("\nOpção de busca inválida.\n");
+                limpar_entrada();
+                break; 
             }
             
             limpar_entrada(); 
 
             if (tipbusca == 1) { 
-            printf("Digite o CPF: ");
-            if (fgets(c_cpf, TAM_CPF, stdin) == NULL) break;
-            c_cpf[strcspn(c_cpf, "\n")] = 0;
+                printf("Digite o CPF: ");
+                if (fgets(c_cpf, TAM_CPF, stdin) == NULL) break;
+                c_cpf[strcspn(c_cpf, "\n")] = 0;
         
-            idx = encontrar_conta_por_cpf(contas, qtd_contas, c_cpf); 
+                idx = encontrar_conta_por_cpf(contas, qtd_contas, c_cpf); 
             }
     
             else if (tipbusca == 2) { 
-            printf("Digite o Numero da Conta: ");
-            if (scanf("%d", &c_num) != 1) {
-            printf("\nERRO: Entrada inválida para o número da conta.\n");
-            limpar_entrada();
-            break;
-            }
-            
-            limpar_entrada(); 
+                printf("Digite o Numero da Conta: ");
+                if (scanf("%d", &c_num) != 1) {
+                    printf("\nERRO: Entrada inválida para o número da conta.\n");
+                    limpar_entrada();
+                    break;
+                }
+                
+                limpar_entrada(); 
 
-            idx = encontrar_conta_por_numero(contas, qtd_contas, c_num);
+                idx = encontrar_conta_por_numero(contas, qtd_contas, c_num);
             } 
 
             else {
-            printf("\nOpção de busca não reconhecida. Escolha 1 ou 2.\n");
-            break;
+                printf("\nOpção de busca não reconhecida. Escolha 1 ou 2.\n");
+                break;
             }
     
             if (idx != -1) {
-            imprimir_dados_conta(&contas[idx]);
+                imprimir_dados_conta(&contas[idx]);
             } else {
-            printf("\nERRO: Conta não encontrada no sistema.\n");
+                printf("\nERRO: Conta não encontrada no sistema.\n");
             }
     
             break;
         }
-        
+
+        // ------------------------------------------------------
+        // ADIÇÕES NOVAS
+        // ------------------------------------------------------
+
+        case 6:
+        {
+            int numero;
+            char novo_tel[TAM_TELEFONE], nova_ag[TAM_AGENCIA];
+
+            printf("\n--- Atualizar Dados ---\n");
+            printf("Numero da conta: ");
+            if (scanf("%d", &numero) != 1) { limpar_entrada(); printf("ERRO: entrada inválida.\n"); break; }
+            limpar_entrada();
+
+            printf("Nova agência: ");
+            fgets(nova_ag, TAM_AGENCIA, stdin);
+            nova_ag[strcspn(nova_ag, "\n")] = 0;
+
+            printf("Novo telefone: ");
+            fgets(novo_tel, TAM_TELEFONE, stdin);
+            novo_tel[strcspn(novo_tel, "\n")] = 0;
+
+            int r = atualizar_dados(contas, qtd_contas, numero, nova_ag, novo_tel);
+
+            if (r == 0) printf("\nDados atualizados com sucesso!\n");
+            else if (r == -1) printf("\nERRO: Conta inexistente.\n");
+            else if (r == -2) printf("\nERRO: Conta encerrada, não é possível atualizar.\n");
+        }
+        break;
+
+        case 7:
+        {
+            listar_contas(contas, qtd_contas);
+        }
+        break;
+
+        case 8:
+        {
+            int numero;
+            printf("\n--- Encerrar Conta ---\n");
+            printf("Numero da conta: ");
+            if (scanf("%d", &numero) != 1) { limpar_entrada(); printf("ERRO: entrada inválida.\n"); break; }
+            limpar_entrada();
+
+            int r = encerrar_conta(contas, qtd_contas, numero);
+
+            if (r == 0) printf("\nConta encerrada com sucesso!\n");
+            else if (r == -1) printf("\nERRO: Conta não encontrada.\n");
+            else if (r == -2) printf("\nERRO: Conta já está encerrada.\n");
+            else if (r == -3) printf("\nERRO: Conta só pode ser encerrada com saldo zero.\n");
+        }
+        break;
+
+
         default:
             printf("\nOpção inválida! Tente novamente.\n");
             break;
