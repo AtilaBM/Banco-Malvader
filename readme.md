@@ -63,7 +63,7 @@ Os dados são mantidos mesmo após fechar o programa.
 
 ## 👥 Contributors
 
-<a href="https://github.com/seu-usuario/BancoMalvader/graphs/contributors">
+<a href="https://github.com/AtilaBM/BancoMalvader/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=AtilaBM/BancoMalvader" />
 </a>
 
