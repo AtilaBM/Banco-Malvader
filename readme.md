@@ -61,6 +61,14 @@ Os dados são mantidos mesmo após fechar o programa.
 
 ---
 
+## 👥 Contributors
+
+<a href="https://github.com/seu-usuario/BancoMalvader/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=AtilaBM/BancoMalvader" />
+</a>
+
+---
+
 **Disciplina**: Estrutura de Dados e Algoritmos
 
 **Instituição**: Universidade Católica de Brasília
